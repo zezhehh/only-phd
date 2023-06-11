@@ -1,4 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
   --primary-color: #6a9fb4;
   --secondary-color: #e8dab2;
   --neutral-color: #9ca496;
@@ -6,6 +13,14 @@
   --error-color: #df2b2b;
   --black-color: #200f09;
   --white-color: #eaeaea;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
 }
 
 body {
@@ -16,10 +31,9 @@ body {
     var(--secondary-color),
     var(--orange-color)
   );
-  background-size: 200% 200%;
+  background-size: 300% 300%;
   animation: gradient-bg 15s ease infinite;
   -webkit-animation: gradient-bg 15s ease infinite;
-  height: 100vh;
 }
 
 @keyframes gradient-bg {
