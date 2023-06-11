@@ -1,0 +1,47 @@
+:root {
+  --primary-color: #6a9fb4;
+  --secondary-color: #e8dab2;
+  --neutral-color: #9ca496;
+  --orange-color: #e3a47a;
+  --error-color: #df2b2b;
+  --black-color: #200f09;
+  --white-color: #eaeaea;
+}
+
+body {
+  background: linear-gradient(
+    -45deg,
+    var(--primary-color),
+    var(--neutral-color),
+    var(--secondary-color),
+    var(--orange-color)
+  );
+  background-size: 200% 200%;
+  animation: gradient-bg 15s ease infinite;
+  -webkit-animation: gradient-bg 15s ease infinite;
+  height: 100vh;
+}
+
+@keyframes gradient-bg {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@-webkit-keyframes gradient-bg {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
