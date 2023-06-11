@@ -14,7 +14,7 @@ const Map = () => {
           style: 'mapbox://styles/kiki0805/clirh61tb007e01qy1wbmg9lv',
           center: [15.4542, 18.7322], // center map on Chad
           zoom: 1.8})
-        map.current.on('click', (e) => {
+        map.current.on('click', (e: { point: any; }) => {
           var features = map.current.queryRenderedFeatures(e.point);
           console.log(JSON.stringify(features, null, 2));
         })
