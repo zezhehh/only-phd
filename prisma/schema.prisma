@@ -28,7 +28,7 @@ model SubjectOffered {
 
 datasource academics {
     provider = "sqlite"
-    url      = "file:./academics.db"
+    url      = "file:../public/academics.db"
 }
 
 generator client {
