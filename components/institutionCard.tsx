@@ -11,6 +11,7 @@ const InstitutionCard = ({ institution }: { institution: Institution }) => {
           <div className="tooltip" data-tip="QS Score">
             <div
               className="radial-progress  bg-secondary text-primary border-4 border-secondary"
+              // @ts-ignore
               style={{ "--value": institution.qsScore }}
             >
               {institution.qsScore}
@@ -19,6 +20,7 @@ const InstitutionCard = ({ institution }: { institution: Institution }) => {
           <div className="tooltip" data-tip="Times Score">
             <div
               className="radial-progress bg-secondary text-primary border-4 border-secondary"
+              // @ts-ignore
               style={{ "--value": institution.timesScore }}
             >
               {institution.timesScore}
