@@ -1,4 +1,4 @@
-import getClient from "./client";
+import prisma from "./client";
 
 import { Institution, Subject, SubjectOffered } from "./types";
 
@@ -6,7 +6,6 @@ export const fetchInstitutions = async (
   page: number,
   pageSize: number = 50
 ): Promise<Institution[]> => {
-  const prisma = await getClient();
   const institutions = await prisma.institution.findMany({
     skip: (page - 1) * pageSize,
     take: pageSize,
@@ -20,7 +19,6 @@ export async function filterInstitutionsByName(
   pageSize: number = 50
 ): Promise<Institution[]> {
   name = name.toLowerCase();
-  const prisma = await getClient();
   const filteredInstitutions = await prisma.institution.findMany({
     where: {
       lowerCaseName: {
