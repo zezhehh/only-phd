@@ -1,12 +1,12 @@
 import React from "react"
 import Landing from "./landing"
-import Map from "./map"
+import Panel from "./panel"
 
 const App = () => {
     return (
         <>
             <Landing />
-            <Map />
+            <Panel />
         </>
     )
 }

@@ -16,5 +16,7 @@ module.exports = {
       white: "var(--white-color)",
     },
   },
-  plugins: [],
+  plugins: [
+    require("daisyui"),
+  ],
 }

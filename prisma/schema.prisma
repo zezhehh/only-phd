@@ -1,0 +1,36 @@
+model Subject {
+    id   Int    @id
+    name String @unique
+
+    @@map("subjects")
+}
+
+model Institution {
+    id            Int    @id
+    qsScore       Float  @map("qs_score")
+    timesScore    Float  @map("times_score")
+    name          String @unique
+    lowerCaseName String @unique @map("lower_case_name")
+    countryCode   String @map("country_code")
+    website       String
+
+    @@map("institutions")
+}
+
+model SubjectOffered {
+    id            Int @id
+    institutionId Int @map("instituion_id")
+    subjectId     Int @map("subject_id")
+
+    @@unique([institutionId, subjectId])
+    @@map("subject_offered")
+}
+
+datasource academics {
+    provider = "sqlite"
+    url      = "file:./academics.db"
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
