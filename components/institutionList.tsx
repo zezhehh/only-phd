@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import InstitutionCard from "./institutionCard";
 import { Institution } from "@/utils/db/types";
+
 const InstitutionList = ({ searchContent }: { searchContent: string }) => {
   const [page, setPage] = useState(1);
   const [institutions, setInstitutions] = useState<Institution[]>([]);
