@@ -16,7 +16,7 @@ async function fetchAndStoreFile(url: string, filePath: string) {
 }
 
 const url =
-  "https://raw.githubusercontent.com/zezhehh/only-phd/main/public/academics.db";
+  "https://raw.githubusercontent.com/zezhehh/only-phd/main/prisma/academics.db";
 const localFilePath = "./academics.db";
 
 const getClient = async () => {
