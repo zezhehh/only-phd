@@ -29,7 +29,6 @@ const Map = () => {
       .send();
 
     const features = response.body.features;
-    console.log(features);
     if (features.length === 0) return;
     const { center } = features[0];
 

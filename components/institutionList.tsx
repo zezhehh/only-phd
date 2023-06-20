@@ -33,7 +33,7 @@ const InstitutionList = ({ searchContent }: { searchContent: string }) => {
 
   const handleScroll = (e: any) => {
     const bottom =
-      e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+      Math.round(e.target.scrollHeight - e.target.scrollTop) === e.target.clientHeight;
     if (bottom) {
       setPage(page + 1);
     }
