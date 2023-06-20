@@ -4,6 +4,16 @@ import { useAtom } from "jotai";
 import { curPlaceAtom } from "@/utils/states";
 import { useHoverDirty } from "react-use";
 
+export const LoadingCard = () => {
+  return (
+    <div className="card w-full glass mb-5">
+      <div className="card-body flex justify-around items-center">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    </div>
+  );
+};
+
 const InstitutionCard = ({ institution }: { institution: Institution }) => {
   const [_, setPlaceName] = useAtom(curPlaceAtom);
   const self = useRef<HTMLDivElement>(null);

@@ -1,40 +1,37 @@
 import React, { useEffect, useRef, useState } from "react";
-import InstitutionCard from "./institutionCard";
+import InstitutionCard, { LoadingCard } from "./institutionCard";
 import { Institution } from "@/utils/db/types";
+import useSWR from "swr";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const InstitutionList = ({ searchContent }: { searchContent: string }) => {
   const [page, setPage] = useState(1);
   const [institutions, setInstitutions] = useState<Institution[]>([]);
-  const fetchData = async () => {
-    const response = await fetch(
-      `/api/academics?page=${page}&pageSize=10&search=${searchContent}`
-    );
-    const responseJson = await response.json();
-    setInstitutions([...institutions, ...responseJson]);
-  };
-
+  const { data, error, isLoading } = useSWR(
+    `/api/academics?page=${page}&pageSize=10&search=${searchContent}`,
+    fetcher
+  );
   useEffect(() => {
-    fetchData();
-  }, [page]);
-
-  useEffect(() => {
-    setInstitutions([]);
-  }, [searchContent]);
-
-  useEffect(() => {
-    if (institutions.length !== 0) return;
-    fetchData();
-    if (page === 1) {
-      fetchData();
-    } else {
-      setPage(1);
+    if (!data) {
+      return;
     }
-  }, [institutions]);
+    if (page === 1) {
+      setInstitutions(data);
+    } else {
+      setInstitutions([...institutions, ...data]);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchContent]);
 
   const handleScroll = (e: any) => {
     const bottom =
-      Math.round(e.target.scrollHeight - e.target.scrollTop) === e.target.clientHeight;
-    if (bottom) {
+      Math.round(e.target.scrollHeight - e.target.scrollTop) ===
+      e.target.clientHeight;
+    if (bottom && (!data || data.length !== 0) && !isLoading) {
       setPage(page + 1);
     }
   };
@@ -46,6 +43,7 @@ const InstitutionList = ({ searchContent }: { searchContent: string }) => {
       {institutions.map((institution) => (
         <InstitutionCard institution={institution} key={institution.id} />
       ))}
+      {isLoading && <LoadingCard />}
     </div>
   );
 };
