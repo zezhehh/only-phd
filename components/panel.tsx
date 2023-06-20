@@ -10,7 +10,7 @@ const Panel = () => {
   
   return (
     <div className="relative w-screen h-screen">
-      <div className="absolute w-1/3 h-screen overflow-hidden p-16 pr-3 flex flex-col justify-center items-center">
+      <div className="absolute w-1/3 h-screen overflow-hidden p-16 pr-3 flex flex-col justify-center items-center invisilbe lg:visible">
         <div className="w-full">
           <input
             value={searchContent}

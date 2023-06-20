@@ -81,11 +81,11 @@ const Map = () => {
     <div className="mx-auto flex justify-center items-center">
       <div
         ref={rightEdge}
-        className="absolute flex justify-center items-center inset-y-0 right-0 w-48 z-30 hover:bg-[#eaeaea]/50 transition ease-in-out opacity-0 hover:opacity-100"
+        className="absolute flex justify-center items-center inset-y-0 right-0 w-48 z-30 hover:bg-[#eaeaea]/50 transition ease-in-out opacity-0 hover:opacity-100 invisible lg:visible"
       >
         Scroll page
       </div>
-      <div id="map" className="ml-auto w-2/3 h-screen"></div>
+      <div id="map" className="ml-auto lg:w-2/3 w-screen h-screen"></div>
     </div>
   );
 };
