@@ -37,7 +37,9 @@ const InstitutionList = ({ searchContent }: { searchContent: string }) => {
   };
   return (
     <div
-      className="h-[80vh] overflow-y-scroll scrollbar-none transition ease-in-out w-full"
+      className={`overflow-y-scroll scrollbar-none transition-[height] duration-500 ease-in-out w-full${
+        searchContent ? " h-[80vh]" : " h-0"
+      }`}
       onScroll={(e) => handleScroll(e)}
     >
       {institutions.map((institution) => (

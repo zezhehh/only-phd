@@ -42,7 +42,7 @@ const Panel = () => {
             className="input input-bordered input-primary w-full mb-5"
           />
         </div>
-        {searchContent && <InstitutionList searchContent={searchContent} />}
+        <InstitutionList searchContent={searchContent} />
       </div>
       <Map />
     </div>
