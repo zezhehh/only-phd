@@ -45,8 +45,8 @@ const Panel = () => {
   }, [data]);
 
   return (
-    <div className="relative w-screen h-screen">
-      <div className="absolute w-1/3 h-screen overflow-hidden p-16 pr-3 flex flex-col justify-center items-center invisilbe lg:visible">
+    <div className="relative w-screen h-screen snap-center">
+      <div className="absolute w-1/3 h-screen overflow-hidden p-16 pr-3 flex flex-col justify-center items-center invisilbe xl:visible">
         <div className="w-full">
           {searchContent && <TIPS />}
           <input

@@ -1,10 +1,10 @@
 import React from "react";
 import "animate.css";
-import 'tailwindcss/tailwind.css'
+import "tailwindcss/tailwind.css";
 
 const Landing = () => {
   return (
-    <div className="mx-auto flex flex-col justify-center items-center h-screen">
+    <div className="mx-auto flex flex-col justify-center items-center h-screen snap-center">
       <div className="text-center">
         <h1 className="text-4xl font-bold text-black animate__animated animate__fadeIn">
           🌎探索、点击、连接
@@ -20,4 +20,4 @@ const Landing = () => {
   );
 };
 
-export default Landing
+export default Landing;
