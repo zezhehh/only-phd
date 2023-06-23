@@ -8,7 +8,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const InstitutionList = ({ searchContent }: { searchContent: string }) => {
   const [page, setPage] = useState(1);
   const [institutions, setInstitutions] = useState<Institution[]>([]);
-  const { data, error, isLoading } = useSWR(
+  const { data, isLoading } = useSWR(
     `/api/academics?page=${page}&pageSize=10&search=${searchContent}`,
     fetcher
   );

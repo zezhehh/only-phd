@@ -2,6 +2,10 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Map from "./map";
+import useSWR from "swr";
+import { useAtom } from "jotai";
+import { tokenAtom, isAdminAtom } from "@/utils/states";
+import { adminFetcher } from "./admin";
 
 import InstitutionList from "./institutionList";
 
@@ -28,6 +32,17 @@ const TIPS = () => {
 
 const Panel = () => {
   const [searchContent, setSearchContent] = useState("");
+  const [, setIsAdmin] = useAtom(isAdminAtom);
+  const [token] = useAtom(tokenAtom);
+  const { data } = useSWR(token, adminFetcher);
+
+  useEffect(() => {
+    if (data) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, [data]);
 
   return (
     <div className="relative w-screen h-screen">
@@ -38,7 +53,7 @@ const Panel = () => {
             value={searchContent}
             onChange={(e) => setSearchContent(e.target.value)}
             type="text"
-            placeholder="Search institutions"
+            placeholder="Search with institution names and/or subjects"
             className="input input-bordered input-primary w-full mb-5"
           />
         </div>

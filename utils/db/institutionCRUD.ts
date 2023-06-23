@@ -13,11 +13,11 @@ export const fetchInstitutions = async (
   return institutions;
 };
 
-export async function filterInstitutionsByName(
+export const filterInstitutionsByName = async (
   name: string,
   page: number,
   pageSize: number = 50
-): Promise<Institution[]> {
+): Promise<Institution[]> => {
   name = name.toLowerCase();
   const filteredInstitutions = await prisma.institution.findMany({
     where: {
@@ -29,4 +29,18 @@ export async function filterInstitutionsByName(
     take: pageSize,
   });
   return filteredInstitutions;
-}
+};
+
+export const updateInstitutionWebsite = async (
+  id: number,
+  website: string
+): Promise<Institution> => {
+  return await prisma.institution.update({
+    where: {
+      id,
+    },
+    data: {
+      website,
+    },
+  });
+};
