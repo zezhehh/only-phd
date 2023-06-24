@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
 import { Institution } from "@/utils/db/types";
+import { curPlaceAtom, isAdminAtom, tokenAtom } from "@/utils/states";
 import { useAtom } from "jotai";
-import { curPlaceAtom, isAdminAtom } from "@/utils/states";
+import { useEffect, useRef, useState } from "react";
 import { useHoverDirty } from "react-use";
-import { HideSVG, ErrSVG } from "./svgs";
+import { ErrSVG, HideSVG } from "./svgs";
 
 export const LoadingCard = () => {
   return (
@@ -25,6 +25,7 @@ const ErrorAlert = ({ err }: { err: string }) => (
 const InstitutionCard = ({ institution }: { institution: Institution }) => {
   const [, setPlaceName] = useAtom(curPlaceAtom);
   const [isAdmin] = useAtom(isAdminAtom);
+  const [token] = useAtom(tokenAtom);
   const [website, setWebsite] = useState("");
   const [open, setOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
@@ -52,6 +53,7 @@ const InstitutionCard = ({ institution }: { institution: Institution }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: token,
         },
         body: JSON.stringify({
           website,
@@ -77,6 +79,7 @@ const InstitutionCard = ({ institution }: { institution: Institution }) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: token,
       },
       body: JSON.stringify({
         hidden: true,
@@ -92,7 +95,7 @@ const InstitutionCard = ({ institution }: { institution: Institution }) => {
       className={`w-full transition-all duration-500 ${
         hidden
           ? "max-h-0 animate__animated animate__fadeOut"
-          : "mb-5 glass card max-h-[328px]"
+          : "mb-5 glass card max-h-96"
       }`}
       ref={self}
     >

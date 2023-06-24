@@ -16,11 +16,17 @@ export default async function handler(
   }
   const { pid } = req.query;
   const { website, hidden } = req.body;
+  const token = req.headers.authorization;
 
-  if (!pid || (!website && !hidden)) {
+  if (!pid || (!website && !hidden) || !token) {
     res
       .status(400)
-      .json({ error: "pid and website/hidden parameters are required" });
+      .json({ error: "token, pid and website/hidden parameters are required" });
+    return;
+  }
+
+  if (token !== process.env.ADMIN_TOKEN) {
+    res.status(401).json({ error: "Invalid token" });
     return;
   }
 

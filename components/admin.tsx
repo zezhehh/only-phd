@@ -1,9 +1,11 @@
 "use client";
 
-import React, { FormEvent, useEffect, useState } from "react";
 import { tokenAtom } from "@/utils/states";
 import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
+import { SuccessAlert } from "./alerts";
+import Merger from "./merger";
 
 export const adminFetcher = (token: string): Promise<boolean> =>
   fetch("/api/isAdmin", {
@@ -36,24 +38,8 @@ const Admin = () => {
         placeholder="Input the admin token"
         className="input input-bordered w-full max-w-xs"
       />
-      {data && (
-        <div className="alert alert-success w-full max-w-xs mt-5">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span>Successfully verified admin role!</span>
-        </div>
-      )}
+      {data && <SuccessAlert info="Successfully verified admin role!" />}
+      {data && <Merger />}
     </div>
   );
 };

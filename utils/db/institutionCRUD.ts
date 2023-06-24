@@ -1,7 +1,7 @@
 import prisma from "./client";
 
-import { Institution, Subject, SubjectOffered } from "./types";
 import _ from "lodash";
+import { Institution, SubjectOffered } from "./types";
 
 export const fetchInstitutions = async (
   page: number,
@@ -15,6 +15,17 @@ export const fetchInstitutions = async (
     take: pageSize,
   });
   return institutions;
+};
+
+export const fetchInstitutionByName = async (
+  name: string
+): Promise<Institution | null> => {
+  const institution = await prisma.institution.findUnique({
+    where: {
+      name: name,
+    },
+  });
+  return institution;
 };
 
 export const filterInstitutionsByName = async (

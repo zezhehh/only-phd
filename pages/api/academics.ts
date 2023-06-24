@@ -1,9 +1,10 @@
 import {
+  fetchInstitutionByName,
   fetchInstitutions,
   filterInstitutionsByName,
 } from "@/utils/db/institutionCRUD";
-import { NextApiRequest, NextApiResponse } from "next";
 import { Institution } from "@/utils/db/types";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,8 +15,8 @@ export default async function handler(
     return;
   }
 
-  let { page, pageSize, search } = req.query;
-  if (!page) {
+  let { page, pageSize, search, name } = req.query;
+  if (!page && !name) {
     res.status(400).json({ error: "page parameter is required" });
     return;
   }
@@ -27,6 +28,9 @@ export default async function handler(
       parseInt(page as string),
       parseInt(pageSize as string) || 50
     );
+  } else if (name) {
+    const institution = await fetchInstitutionByName(name as string);
+    institutions = institution ? [institution] : [];
   } else {
     institutions = await fetchInstitutions(
       parseInt(page as string),
