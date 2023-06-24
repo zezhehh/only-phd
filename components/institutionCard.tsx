@@ -47,7 +47,7 @@ const InstitutionCard = ({ institution }: { institution: Institution }) => {
   const isHovered = useHoverDirty(self);
   useEffect(() => {
     if (isHovered) {
-      setPlaceName(institution.name);
+      // setPlaceName(institution.name);
     }
   }, [isHovered]);
 
@@ -117,13 +117,21 @@ const InstitutionCard = ({ institution }: { institution: Institution }) => {
               Edit (Admin only)
             </button>
           )}
-          <a
-            href={updated ? website : institution.website}
-            target="_blank"
-            className="btn btn-accent w-full"
-          >
-            Go to the site!
-          </a>
+          <div className="flex flex-row justify-between items-stretch w-full">
+            <a
+              href={updated ? website : institution.website}
+              target="_blank"
+              className="btn btn-accent w-[calc(50%_-_1.25rem/2)]"
+            >
+              Go to the site!
+            </a>
+            <button
+              className="btn btn-accent w-[calc(50%_-_1.25rem/2)]"
+              onClick={() => setPlaceName(institution.name)}
+            >
+              Fly to
+            </button>
+          </div>
         </div>
       </div>
 
