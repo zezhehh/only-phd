@@ -84,7 +84,7 @@ const Merger = () => {
         </div>
       )}
       {institution1 && institution2 && institution1.id === institution2.id && (
-        <div>Make sure they're not the same institution</div>
+        <div>Make sure they are not the same institution</div>
       )}
       {merged && <SuccessAlert info="Successfully merged!" />}
     </div>
