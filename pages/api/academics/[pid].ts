@@ -1,4 +1,4 @@
-import { updateInstitutionWebsite } from "@/utils/db/institutionCRUD";
+import { updateInstitution } from "@/utils/db/institutionCRUD";
 import { Institution } from "@/utils/db/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,17 +15,21 @@ export default async function handler(
     return;
   }
   const { pid } = req.query;
-  const { website } = req.body;
+  const { website, hidden } = req.body;
 
-  if (!pid || !website) {
-    res.status(400).json({ error: "pid and website parameters are required" });
+  if (!pid || (!website && !hidden)) {
+    res
+      .status(400)
+      .json({ error: "pid and website/hidden parameters are required" });
     return;
   }
 
-  const institution = await updateInstitutionWebsite(
-    parseInt(pid as string),
-    website as string
-  );
+  let institution: Institution;
+  if (hidden) {
+    institution = await updateInstitution(parseInt(pid as string), { hidden });
+  } else {
+    institution = await updateInstitution(parseInt(pid as string), { website });
+  }
 
   res.status(200).json(institution);
 }

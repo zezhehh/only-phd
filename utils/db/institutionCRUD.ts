@@ -8,6 +8,9 @@ export const fetchInstitutions = async (
   pageSize: number = 50
 ): Promise<Institution[]> => {
   const institutions = await prisma.institution.findMany({
+    where: {
+      hidden: false,
+    },
     skip: (page - 1) * pageSize,
     take: pageSize,
   });
@@ -22,6 +25,7 @@ export const filterInstitutionsByName = async (
   name = name.toLowerCase();
   const filteredInstitutions = await prisma.institution.findMany({
     where: {
+      hidden: false,
       lowerCaseName: {
         contains: name,
       },
@@ -32,10 +36,24 @@ export const filterInstitutionsByName = async (
   return filteredInstitutions;
 };
 
-export const updateInstitutionWebsite = async (
+export const updateInstitution = async (
   id: number,
-  website: string
+  data: {
+    website?: string;
+    hidden?: boolean;
+  }
 ): Promise<Institution> => {
+  const { website, hidden } = data;
+  if (hidden) {
+    return await prisma.institution.update({
+      where: {
+        id,
+      },
+      data: {
+        hidden,
+      },
+    });
+  }
   return await prisma.institution.update({
     where: {
       id,
@@ -111,15 +129,4 @@ export const mergeInstitutions = async (
   });
 
   return newInstitution;
-};
-
-export const hideInstitution = async (id: number): Promise<void> => {
-  await prisma.institution.update({
-    where: {
-      id,
-    },
-    data: {
-      hidden: true,
-    },
-  });
 };

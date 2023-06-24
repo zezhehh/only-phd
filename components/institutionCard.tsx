@@ -3,6 +3,7 @@ import { Institution } from "@/utils/db/types";
 import { useAtom } from "jotai";
 import { curPlaceAtom, isAdminAtom } from "@/utils/states";
 import { useHoverDirty } from "react-use";
+import { HideSVG, ErrSVG } from "./svgs";
 
 export const LoadingCard = () => {
   return (
@@ -16,19 +17,7 @@ export const LoadingCard = () => {
 
 const ErrorAlert = ({ err }: { err: string }) => (
   <div className="alert alert-error w-4/5 mt-5">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="stroke-current shrink-0 h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
+    <ErrSVG />
     <span>{err}</span>
   </div>
 );
@@ -40,6 +29,7 @@ const InstitutionCard = ({ institution }: { institution: Institution }) => {
   const [open, setOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [updated, setUpdated] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [err, setErr] = useState("");
 
   const self = useRef<HTMLDivElement>(null);
@@ -82,12 +72,44 @@ const InstitutionCard = ({ institution }: { institution: Institution }) => {
     setUpdating(false);
   };
 
+  const onHide = async () => {
+    await fetch(`/api/academics/${institution.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        hidden: true,
+      }),
+    });
+    setHidden(true);
+  };
+
   if (!institution) return null;
 
   return (
-    <div className="card w-full glass mb-5" ref={self}>
+    <div
+      className={`w-full transition-all duration-500 ${
+        hidden
+          ? "max-h-0 animate__animated animate__fadeOut"
+          : "mb-5 glass card max-h-[328px]"
+      }`}
+      ref={self}
+    >
       <div className="card-body">
-        <h2 className="card-title mb-3">{institution.name}</h2>
+        <h2 className="card-title mb-3">
+          {institution.name}
+          {isAdmin && (
+            <div className="tooltip ml-auto" data-tip="Hide">
+              <button
+                className="btn btn-sm btn-circle btn-ghost"
+                onClick={onHide}
+              >
+                <HideSVG />
+              </button>
+            </div>
+          )}
+        </h2>
         <div className="flex justify-around	 items-center mb-3">
           <div className="tooltip" data-tip="QS Score">
             <div
