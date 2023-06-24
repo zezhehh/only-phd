@@ -1,38 +1,39 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource academics {
+    provider          = "postgresql"
+    url               = env("POSTGRES_PRISMA_URL")
+    directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+    shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+}
+
 model Subject {
-    id   Int    @id
+    id   Int    @id @default(autoincrement())
     name String @unique
 
     @@map("subjects")
 }
 
 model Institution {
-    id            Int    @id
-    qsScore       Float  @map("qs_score")
-    timesScore    Float  @map("times_score")
-    name          String @unique
-    lowerCaseName String @unique @map("lower_case_name")
-    countryCode   String @map("country_code")
+    id            Int     @id @default(autoincrement())
+    qsScore       Float   @map("qs_score") @academics.Real
+    timesScore    Float   @map("times_score") @academics.Real
+    name          String  @unique
+    lowerCaseName String  @unique @map("lower_case_name")
+    countryCode   String  @map("country_code")
     website       String
+    hidden        Boolean @default(false)
 
     @@map("institutions")
 }
 
 model SubjectOffered {
-    id            Int @id
-    institutionId Int @map("instituion_id")
+    id            Int @id @default(autoincrement())
+    institutionId Int @map("institution_id")
     subjectId     Int @map("subject_id")
 
     @@unique([institutionId, subjectId])
     @@map("subject_offered")
-}
-
-datasource academics {
-    provider          = "postgresql"
-    url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
-    directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-    shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
-}
-
-generator client {
-    provider = "prisma-client-js"
 }
