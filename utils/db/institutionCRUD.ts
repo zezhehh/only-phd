@@ -17,6 +17,17 @@ export const fetchInstitutions = async (
   return institutions;
 };
 
+export const fetchInstitutionByID = async (
+  id: number
+): Promise<Institution | null> => {
+  const institution = await prisma.institution.findUnique({
+    where: {
+      id,
+    },
+  });
+  return institution;
+};
+
 export const fetchInstitutionByName = async (
   name: string
 ): Promise<Institution | null> => {

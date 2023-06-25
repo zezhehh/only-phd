@@ -1,21 +1,30 @@
-import React, { useEffect, useRef, useState } from "react";
-import InstitutionCard, { LoadingCard } from "./institutionCard";
 import { Institution } from "@/utils/db/types";
+import useDebounce from "@/utils/hooks/use-debounce";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
+import InstitutionCard, { LoadingCard } from "./institutionCard";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const InstitutionList = ({ searchContent }: { searchContent: string }) => {
   const [page, setPage] = useState(1);
   const [institutions, setInstitutions] = useState<Institution[]>([]);
-  const { data, isLoading } = useSWR(
-    `/api/academics?page=${page}&pageSize=10&search=${searchContent}`,
+  const debounce = useDebounce(searchContent, 500);
+
+  const { data, isLoading, error } = useSWR(
+    searchContent && debounce
+      ? `/api/academics/search?page=${page}&pageSize=10&search=${searchContent}`
+      : null,
     fetcher
   );
+
   useEffect(() => {
-    if (!data) {
+    console.log(data);
+    if (!data || (data as any).error || error) {
+      console.log(data);
       return;
     }
+
     if (page === 1) {
       setInstitutions(data);
     } else {
@@ -31,7 +40,12 @@ const InstitutionList = ({ searchContent }: { searchContent: string }) => {
     const bottom =
       Math.round(e.target.scrollHeight - e.target.scrollTop) ===
       e.target.clientHeight;
-    if (bottom && (!data || data.length !== 0) && !isLoading) {
+    if (
+      bottom &&
+      !(data as any).error &&
+      (!data || (data as Institution[]).length !== 0) &&
+      !isLoading
+    ) {
       setPage(page + 1);
     }
   };
