@@ -4,26 +4,51 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import InstitutionCard, { LoadingCard } from "./institutionCard";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (
+  search: string,
+  countries: string[],
+  page: number,
+  pageSize: number = 10
+) =>
+  fetch("/api/academics/search", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      page,
+      pageSize,
+      search,
+      countries,
+    }),
+  })
+    .then((res) => res.json())
+    .catch((e) => []);
 
-const InstitutionList = ({ searchContent }: { searchContent: string }) => {
+const InstitutionList = ({
+  searchContent,
+  filterCountries,
+}: {
+  searchContent: string;
+  filterCountries: string[];
+}) => {
   const [page, setPage] = useState(1);
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const debounce = useDebounce(searchContent, 500);
 
   const { data, isLoading, error } = useSWR(
-    searchContent && debounce
-      ? `/api/academics/search?page=${page}&pageSize=10&search=${searchContent}`
+    filterCountries.length !== 0 || (searchContent && debounce)
+      ? [searchContent, filterCountries, page]
       : null,
-    fetcher
+    ([search, countries, page]) => fetcher(search, countries, page)
   );
 
   useEffect(() => {
-    console.log(data);
     if (!data || (data as any).error || error) {
-      console.log(data);
       return;
     }
+
+    console.log(data);
 
     if (page === 1) {
       setInstitutions(data);
@@ -52,7 +77,7 @@ const InstitutionList = ({ searchContent }: { searchContent: string }) => {
   return (
     <div
       className={`overflow-y-scroll scrollbar-none transition-[height] duration-500 ease-in-out w-full${
-        searchContent ? " h-[80vh]" : " h-0"
+        institutions.length !== 0 ? " h-[80vh]" : " h-0"
       }`}
       onScroll={(e) => handleScroll(e)}
     >

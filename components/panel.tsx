@@ -1,15 +1,18 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import Map from "./map";
-import useSWR from "swr";
+import { isAdminAtom, tokenAtom } from "@/utils/states";
 import { useAtom } from "jotai";
-import { tokenAtom, isAdminAtom } from "@/utils/states";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { adminFetcher } from "./admin";
+import Map from "./map";
+import countryMapping from "@/utils/countries";
 
+import _ from "lodash";
 import InstitutionList from "./institutionList";
+import { CloseSVG } from "./svgs";
 
-const TIPS = () => {
+const TIPS = ({ children }: { children: JSX.Element }) => {
   return (
     <div className="alert alert-accent mb-5">
       <svg
@@ -25,7 +28,7 @@ const TIPS = () => {
           d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
         ></path>
       </svg>
-      <span>TIPS: Scroll down to load more</span>
+      {children}
     </div>
   );
 };
@@ -35,6 +38,7 @@ const Panel = () => {
   const [, setIsAdmin] = useAtom(isAdminAtom);
   const [token] = useAtom(tokenAtom);
   const { data } = useSWR(token, adminFetcher);
+  const [badges, setBadges] = useState<string[]>([]);
 
   useEffect(() => {
     if (data) {
@@ -44,11 +48,50 @@ const Panel = () => {
     }
   }, [data]);
 
+  const onClickCountry = (countryCode: string, ctrlKey: boolean) => {
+    const country = countryCode.toUpperCase();
+    if (ctrlKey) {
+      if (!_.includes(badges, country)) {
+        setBadges((prevBadges) => [...prevBadges, country]);
+        console.log(`added country ${country}`);
+      }
+    } else {
+      setBadges([country]);
+      console.log(`clicked country ${country}`);
+    }
+  };
+
   return (
     <div className="relative w-screen h-screen snap-center">
       <div className="absolute w-1/3 h-screen overflow-hidden p-16 pr-3 flex flex-col justify-center items-center invisilbe xl:visible">
         <div className="w-full">
-          {searchContent && <TIPS />}
+          {searchContent && (
+            <TIPS>
+              <span>TIPS: Scroll down to load more</span>
+            </TIPS>
+          )}
+          {badges.length !== 0 && (
+            <TIPS>
+              <span>
+                TIPS: Click with <kbd className="kbd">ctrl</kbd> to add
+                countries
+              </span>
+            </TIPS>
+          )}
+          <div className="mb-2">
+            {badges.map((badge, index) => (
+              <div key={index} className="badge badge-info gap-2 mr-2">
+                <button
+                  onClick={() => {
+                    setBadges(badges.filter((b) => b !== badge));
+                  }}
+                >
+                  <CloseSVG />
+                </button>
+                {badge} {countryMapping.get(badge)}
+              </div>
+            ))}
+          </div>
           <input
             value={searchContent}
             onChange={(e) => setSearchContent(e.target.value)}
@@ -57,9 +100,12 @@ const Panel = () => {
             className="input input-bordered input-primary w-full mb-5"
           />
         </div>
-        <InstitutionList searchContent={searchContent} />
+        <InstitutionList
+          searchContent={searchContent}
+          filterCountries={badges}
+        />
       </div>
-      <Map />
+      <Map onClickCountry={onClickCountry} />
     </div>
   );
 };

@@ -28,6 +28,19 @@ export const fetchInstitutionByID = async (
   return institution;
 };
 
+export const fetchInstitutionsByIDs = async (
+  ...ids: number[]
+): Promise<Institution[]> => {
+  const institutions = await prisma.institution.findMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
+  return institutions;
+};
+
 export const fetchInstitutionByName = async (
   name: string
 ): Promise<Institution | null> => {
