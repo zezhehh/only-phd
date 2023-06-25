@@ -2,7 +2,9 @@ import mapboxgl from "mapbox-gl";
 
 const configMap = (
   map: React.MutableRefObject<mapboxgl.Map>,
-  onClickCountry: (country: string, ctrlKey: boolean) => void
+  onClickCountry: React.MutableRefObject<
+    (country: string, ctrlKey: boolean) => void
+  >
 ) => {
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_GL_ACCESS_TOKEN ?? "";
   map.current = new mapboxgl.Map({
@@ -31,7 +33,7 @@ const configMap = (
         const countryName = countryFeatures[0].text;
         const countryCode = countryFeatures[0].properties.short_code;
         // console.log("Country:", countryName, "Code:", countryCode);
-        onClickCountry(countryCode, e.originalEvent.ctrlKey);
+        onClickCountry.current(countryCode, e.originalEvent.ctrlKey);
       }
     }
   );

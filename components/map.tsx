@@ -6,7 +6,7 @@ import mapboxSdk from "@mapbox/mapbox-sdk/services/geocoding";
 import { useAtom } from "jotai";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useHoverDirty } from "react-use";
 
 const Map = ({
@@ -54,8 +54,16 @@ const Map = ({
     searchPlace();
   }, [placeName]);
 
+  const onClick = useRef((countryCode: string, ctrlKey: boolean) => {
+    onClickCountry(countryCode, ctrlKey);
+  });
+
   useEffect(() => {
-    configMap(map, onClickCountry);
+    onClick.current = onClickCountry;
+  }, [onClickCountry]);
+
+  useEffect(() => {
+    configMap(map, onClick);
 
     marker.current = new mapboxgl.Marker({
       color: "#e3a47a",

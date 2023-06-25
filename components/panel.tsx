@@ -2,13 +2,12 @@
 
 import { isAdminAtom, tokenAtom } from "@/utils/states";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import useSWR from "swr";
 import { adminFetcher } from "./admin";
 import Map from "./map";
 import countryMapping from "@/utils/countries";
 
-import _ from "lodash";
 import InstitutionList from "./institutionList";
 import { CloseSVG } from "./svgs";
 
@@ -48,18 +47,22 @@ const Panel = () => {
     }
   }, [data]);
 
-  const onClickCountry = (countryCode: string, ctrlKey: boolean) => {
-    const country = countryCode.toUpperCase();
-    if (ctrlKey) {
-      if (!_.includes(badges, country)) {
+  const onClickCountry = useCallback(
+    (countryCode: string, ctrlKey: boolean) => {
+      const country = countryCode.toUpperCase();
+      if (badges.includes(country)) {
+        return;
+      }
+      if (ctrlKey) {
         setBadges((prevBadges) => [...prevBadges, country]);
         console.log(`added country ${country}`);
+      } else {
+        setBadges([country]);
+        console.log(`clicked country ${country}`);
       }
-    } else {
-      setBadges([country]);
-      console.log(`clicked country ${country}`);
-    }
-  };
+    },
+    [badges]
+  );
 
   return (
     <div className="relative w-screen h-screen snap-center">
@@ -83,7 +86,9 @@ const Panel = () => {
               <div key={index} className="badge badge-info gap-2 mr-2">
                 <button
                   onClick={() => {
-                    setBadges(badges.filter((b) => b !== badge));
+                    setBadges((prevBadges) =>
+                      prevBadges.filter((b) => b !== badge)
+                    );
                   }}
                 >
                   <CloseSVG />
