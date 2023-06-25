@@ -61,6 +61,12 @@ const InstitutionList = ({
     setPage(1);
   }, [searchContent]);
 
+  useEffect(() => {
+    if (filterCountries.length === 0 && searchContent === "") {
+      setInstitutions([]);
+    }
+  }, [filterCountries, searchContent]);
+
   const handleScroll = (e: any) => {
     const bottom =
       Math.round(e.target.scrollHeight - e.target.scrollTop) ===
