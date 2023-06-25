@@ -17,22 +17,12 @@ export const fetchInstitutions = async (
   return institutions;
 };
 
-export const fetchInstitutionByID = async (
-  id: number
-): Promise<Institution | null> => {
-  const institution = await prisma.institution.findUnique({
-    where: {
-      id,
-    },
-  });
-  return institution;
-};
-
 export const fetchInstitutionsByIDs = async (
   ...ids: number[]
 ): Promise<Institution[]> => {
   const institutions = await prisma.institution.findMany({
     where: {
+      hidden: false,
       id: {
         in: ids,
       },

@@ -59,9 +59,6 @@ const InstitutionList = ({
 
   useEffect(() => {
     setPage(1);
-  }, [searchContent]);
-
-  useEffect(() => {
     if (filterCountries.length === 0 && searchContent === "") {
       setInstitutions([]);
     }
