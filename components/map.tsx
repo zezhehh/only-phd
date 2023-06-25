@@ -6,7 +6,7 @@ import mapboxSdk from "@mapbox/mapbox-sdk/services/geocoding";
 import { useAtom } from "jotai";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useHoverDirty } from "react-use";
 
 const Map = ({
@@ -16,7 +16,7 @@ const Map = ({
 }) => {
   const map = useRef<mapboxgl.Map | any>(null);
   const rightEdge = useRef<HTMLDivElement>(null);
-  const [placeName, setPlaceName] = useAtom(curPlaceAtom);
+  const [placeName] = useAtom(curPlaceAtom);
   const isHoveringEdge = useHoverDirty(rightEdge);
   const marker = useRef<mapboxgl.Marker | any>(null);
   const popup = useRef<mapboxgl.Popup | any>(null);
