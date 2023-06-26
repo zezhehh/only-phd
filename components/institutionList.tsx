@@ -34,7 +34,7 @@ const InstitutionList = ({
 }) => {
   const [page, setPage] = useState(1);
   const [institutions, setInstitutions] = useState<Institution[]>([]);
-  const debounce = useDebounce(searchContent, 500);
+  const debounce = useDebounce(searchContent, 0);
 
   const { data, isLoading, error } = useSWR(
     filterCountries.length !== 0 || (searchContent && debounce)
@@ -80,7 +80,7 @@ const InstitutionList = ({
   return (
     <div
       className={`overflow-y-scroll scrollbar-none transition-[height] duration-500 ease-in-out w-full${
-        institutions.length !== 0 ? " h-[80vh]" : " h-0"
+        institutions.length !== 0 || isLoading ? " h-[80vh]" : " h-0"
       }`}
       onScroll={(e) => handleScroll(e)}
     >
