@@ -1,12 +1,13 @@
 "use client";
 
+import countryMapping from "@/utils/countries";
 import { isAdminAtom, tokenAtom } from "@/utils/states";
 import { useAtom } from "jotai";
-import { useEffect, useState, useCallback } from "react";
+import { GoogleAnalytics } from "nextjs-google-analytics";
+import { useCallback, useEffect, useState } from "react";
 import useSWR from "swr";
 import { adminFetcher } from "./admin";
 import Map from "./map";
-import countryMapping from "@/utils/countries";
 
 import InstitutionList from "./institutionList";
 import { CloseSVG } from "./svgs";
@@ -66,6 +67,7 @@ const Panel = () => {
 
   return (
     <div className="relative w-screen h-screen snap-center">
+      <GoogleAnalytics />
       <div className="absolute w-1/3 h-screen overflow-hidden p-16 pr-3 flex flex-col justify-center items-center invisilbe xl:visible">
         <div className="w-full">
           {searchContent && (
