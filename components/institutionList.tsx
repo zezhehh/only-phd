@@ -34,21 +34,19 @@ const InstitutionList = ({
 }) => {
   const [page, setPage] = useState(1);
   const [institutions, setInstitutions] = useState<Institution[]>([]);
-  const debounce = useDebounce(searchContent, 0);
+  const debounce = useDebounce(searchContent, 100);
 
   const { data, isLoading, error } = useSWR(
-    filterCountries.length !== 0 || (searchContent && debounce)
-      ? [searchContent, filterCountries, page]
+    filterCountries.length !== 0 || debounce
+      ? [debounce, filterCountries, page]
       : null,
-    ([search, countries, page]) => fetcher(search, countries, page)
+    ([...args]) => fetcher(...args)
   );
 
   useEffect(() => {
     if (!data || (data as any).error || error) {
       return;
     }
-
-    console.log(data);
 
     if (page === 1) {
       setInstitutions(data);
@@ -87,7 +85,7 @@ const InstitutionList = ({
       {institutions.map((institution) => (
         <InstitutionCard institution={institution} key={institution.id} />
       ))}
-      {isLoading && <LoadingCard />}
+      {(isLoading || debounce !== searchContent) && <LoadingCard />}
     </div>
   );
 };
